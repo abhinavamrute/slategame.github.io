@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let gameActive = false;
     let clicks = 0;
     let clickLimit = 1;
-    let redTileRevealed = false;
 
     const winButton = document.getElementById("win-button");
     const loseButton = document.getElementById("lose-button");
@@ -37,7 +36,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Start the game
     function startGame() {
         gameActive = true;
-        redTileRevealed = false;
         clicks = 0;
         playButton.disabled = true;
         generateTileStates();
@@ -69,35 +67,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Handle tile click
     function clickTile(e) {
-        if (!gameActive || clicks >= clickLimit || redTileRevealed) return;
+        if (!gameActive || clicks >= clickLimit) return;
 
         const index = parseInt(e.target.dataset.index);
         clicks++;
 
         if (mode === "WIN") {
-            // In WIN mode, force every clicked tile to be green
             forceTileColor(index, "green");
-        } else if (mode === "LOSE") {
-            // In LOSE mode, guarantee that a red tile will appear at some point
-            if (!redTileRevealed && Math.random() < 0.2) {
-                // 20% chance for a red tile to be revealed randomly
-                forceTileColor(index, "red");
-                redTileRevealed = true; // Mark that a red tile has been revealed
-            } else {
-                // Otherwise, force the tile to be green
-                forceTileColor(index, "green");
-            }
+        } else if (mode === "LOSE" && clicks === clickLimit) {
+            forceTileColor(index, "red");
+        } else {
+            forceTileColor(index, "green");
         }
 
         revealTile(tiles[index], tileStates[index]);
 
-        if (redTileRevealed || clicks === clickLimit) {
+        if (clicks === clickLimit || (mode === "LOSE" && tileStates[index] === "red")) {
             revealAllTiles();
             endGame();
         }
     }
 
-    // Ensure the clicked tile has the right color
+    // Ensure the nth clicked tile has the right color
     function forceTileColor(index, color) {
         if (tileStates[index] === color) return;
 
