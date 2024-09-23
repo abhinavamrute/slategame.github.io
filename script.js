@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const loseButton = document.getElementById("lose-button");
     const playButton = document.getElementById("play-button");
     const clickSlider = document.getElementById("click-slider");
+    const clickCount = document.getElementById("click-count"); // Reference to the click count display
     const tileGrid = document.getElementById("tile-grid");
 
     winButton.addEventListener("click", () => setMode("WIN"));
@@ -26,6 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function updateClickLimit() {
         clickLimit = parseInt(clickSlider.value);
+        clickCount.textContent = clickLimit;  // Update the displayed slider value
     }
 
     function startGame() {
