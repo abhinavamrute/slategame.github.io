@@ -10,30 +10,24 @@ document.addEventListener("DOMContentLoaded", function () {
     const loseButton = document.getElementById("lose-button");
     const playButton = document.getElementById("play-button");
     const clickSlider = document.getElementById("click-slider");
-    const clickCount = document.getElementById("click-count");
     const tileGrid = document.getElementById("tile-grid");
 
-    // Attach event listeners to buttons and slider
     winButton.addEventListener("click", () => setMode("WIN"));
     loseButton.addEventListener("click", () => setMode("LOSE"));
     playButton.addEventListener("click", startGame);
     clickSlider.addEventListener("input", updateClickLimit);
 
-    // Set mode and enable play button
     function setMode(selectedMode) {
         mode = selectedMode;
-        winButton.style.backgroundColor = selectedMode === "WIN" ? "#1E8449" : "#3498DB";
-        loseButton.style.backgroundColor = selectedMode === "LOSE" ? "#922B21" : "#3498DB";
+        winButton.style.backgroundColor = selectedMode === "WIN" ? "#1E8449" : "#27AE60";
+        loseButton.style.backgroundColor = selectedMode === "LOSE" ? "#922B21" : "#C0392B";
         playButton.disabled = false;
     }
 
-    // Update click limit and display current value
     function updateClickLimit() {
         clickLimit = parseInt(clickSlider.value);
-        clickCount.textContent = clickLimit;  // Display slider value next to slider
     }
 
-    // Start the game
     function startGame() {
         gameActive = true;
         clicks = 0;
@@ -42,13 +36,12 @@ document.addEventListener("DOMContentLoaded", function () {
         renderTiles();
     }
 
-    // Generate 20 green tiles and 5 red tiles
     function generateTileStates() {
+        // 20 green tiles and 5 red tiles
         tileStates = new Array(20).fill("green").concat(new Array(5).fill("red"));
-        tileStates.sort(() => Math.random() - 0.5); // Shuffle array
+        tileStates.sort(() => Math.random() - 0.5); // Shuffle the array
     }
 
-    // Render the 5x5 grid of tiles
     function renderTiles() {
         tileGrid.innerHTML = "";
         tiles = [];
@@ -65,7 +58,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Handle tile click
     function clickTile(e) {
         if (!gameActive || clicks >= clickLimit) return;
 
@@ -73,11 +65,15 @@ document.addEventListener("DOMContentLoaded", function () {
         clicks++;
 
         if (mode === "WIN") {
+            // In WIN mode, every clicked tile is forced to be green
             forceTileColor(index, "green");
-        } else if (mode === "LOSE" && clicks === clickLimit) {
-            forceTileColor(index, "red");
-        } else {
-            forceTileColor(index, "green");
+        } else if (mode === "LOSE") {
+            // In LOSE mode, the nth click should be red
+            if (clicks === clickLimit) {
+                forceTileColor(index, "red");
+            } else {
+                forceTileColor(index, "green");
+            }
         }
 
         revealTile(tiles[index], tileStates[index]);
@@ -88,7 +84,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Ensure the nth clicked tile has the right color
     function forceTileColor(index, color) {
         if (tileStates[index] === color) return;
 
@@ -96,20 +91,17 @@ document.addEventListener("DOMContentLoaded", function () {
         [tileStates[index], tileStates[swapIndex]] = [tileStates[swapIndex], tileStates[index]];
     }
 
-    // Reveal individual tile
     function revealTile(tile, state) {
         tile.style.backgroundColor = state === "green" ? "#27AE60" : "#C0392B";
         tile.removeEventListener("click", clickTile);
     }
 
-    // Reveal all tiles
     function revealAllTiles() {
         tiles.forEach((tile, i) => {
             setTimeout(() => revealTile(tile, tileStates[i]), i * 50);
         });
     }
 
-    // End the game
     function endGame() {
         gameActive = false;
         playButton.disabled = false;
