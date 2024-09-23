@@ -3,26 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mines-Inspired Game</title>
+    <title>Mines-inspired Game</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
+        <h1>Mines-inspired Game</h1>
         <div class="controls">
-            <button id="win-button" class="control-button">WIN</button>
-            <button id="lose-button" class="control-button">LOSE</button>
-            <button id="play-button" class="control-button" disabled>PLAY</button>
+            <button id="win-button" class="control-btn">WIN</button>
+            <button id="lose-button" class="control-btn">LOSE</button>
+            <button id="play-button" class="control-btn" disabled>PLAY</button>
         </div>
-        
         <div class="slider-container">
-            <label for="click-slider">Select Number of Clicks (1-5): </label>
+            <label for="click-slider">Select Number of Clicks (1-5):</label>
             <input type="range" id="click-slider" min="1" max="5" value="1">
-            <span id="click-count">1</span> <!-- Display slider value here -->
         </div>
-        
-        <div id="tile-grid" class="tile-grid"></div>
+        <div class="tile-grid" id="tile-grid"></div>
     </div>
-
+    
     <script src="script.js"></script>
 </body>
 </html>
